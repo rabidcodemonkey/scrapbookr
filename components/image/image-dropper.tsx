@@ -1,42 +1,70 @@
-import React, { DragEventHandler, DragEvent } from 'react';
-import Dropzone from 'react-dropzone';
+import React from 'react';
+import Dropzone, { DropEvent, FileRejection } from 'react-dropzone';
 
-export type Props = {};
+export const ImageDropper = () => {
+  const [hasFocus, setHasFocus] = React.useState(false);
 
-export const ImageDropper = (props: Props) => {
-  const dragEnter = (event: DragEvent<HTMLElement>) => {
-    console.log(event.dataTransfer);
-    console.log(event.dataTransfer.files);
+  const validationFunction = (file: File) => {
+    //- Return non-null if not ok
+    //- return null if ok
+
+    const valid =
+      file.size < 1000000 //- 1MB
+        ? null // OK
+        : {
+            code: 'file-too-large',
+            message: 'File size is larger than 1MB',
+          };
+
+    return valid;
   };
 
-  const validationFunction = (file) => {
-    //- Return non-null if not ok
-    // return {
-    //     code: 'name-too-large',
-    //     message: `Name is larger than ${maxLength} characters`,
-    // };
+  const onDrop = (
+    acceptedFiles: File[],
+    rejectedFiles: FileRejection[],
+    dropEvent: DropEvent
+  ) => {
+    dropEvent.preventDefault();
+    dropEvent.stopPropagation();
 
-    return null; // OK
+    console.log('--- onDrop ---');
+    console.log('Accepted', acceptedFiles);
+    console.log('Rejected', rejectedFiles);
+    console.log('DropEvent', dropEvent);
+
+    setHasFocus(false);
+  };
+
+  const onDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    setHasFocus(true);
   };
 
   return (
     <Dropzone
-      onDragEnter={dragEnter}
-      onDrop={(acceptedFiles) => console.log(acceptedFiles)}
       accept={{ 'image/*': [] }}
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+      onDragLeave={() => setHasFocus(false)}
       validator={validationFunction}
     >
       {({ getRootProps, getInputProps }) => (
-        <section>
-          <div className='grid place-content-center' {...getRootProps()}>
-            <input {...getInputProps()} />
-            <div className='p-16 border-2 border-dashed border-gray-500 italic hover:bg-gray-500/50 transition-all rounded-md'>
-              Drag &lsquo;n&rsquo; drop some files here, or click to select
-              files
-            </div>
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <div
+            className={`text-center p-16 border-2 border-dashed border-gray-500 italic hover:bg-gray-500/50 foc
+                        transition-all rounded-md cursor-pointer select-none ${
+                          hasFocus ? 'bg-gray-500/50' : ''
+                        }`}
+          >
+            Drag &lsquo;n&rsquo; drop some files here, or click to select files
           </div>
-        </section>
+        </div>
       )}
     </Dropzone>
   );
 };
+
+//- https://github.com/rpldy/react-uploady
