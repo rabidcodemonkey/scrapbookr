@@ -3,6 +3,8 @@ import { ImageDropper } from './ImageDropper';
 import { UploadPreview } from './UploadPreview';
 import { MdCloudUpload } from 'react-icons/md';
 import axios from 'axios';
+import { IBookr } from '../../pages/api/bookr';
+import Router from 'next/router';
 
 type Props = {
   uploadUrl: string;
@@ -28,14 +30,24 @@ export const ImageUploader = ({ uploadUrl }: Props) => {
     images.forEach((image) => {
       formData.append('images', image);
     });
-    axios.post(uploadUrl, formData, {
-      onUploadProgress: (progressEvent) => {
-        console.log(
-          'Upload Progress: ',
-          Math.round((progressEvent.loaded / progressEvent.total) * 100) + '%'
-        );
-      },
-    });
+    axios
+      .post<IBookr>(uploadUrl, formData, {
+        onUploadProgress: (progressEvent) => {
+          console.log(
+            'Upload Progress: ',
+            Math.round((progressEvent.loaded / progressEvent.total) * 100) + '%'
+          );
+        },
+      })
+      .then((response) => {
+        //- Redirect to the url in the response
+        console.log('Upload response', response);
+        Router.push(response.data.url);
+      })
+      .catch((error) => {
+        console.error('Upload error', error);
+        alert('Upload failed');
+      });
   }, [images, uploadUrl]);
 
   return (

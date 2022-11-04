@@ -20,8 +20,9 @@ let filename = uuidv4() + '-' + new Date().getTime();
 const upload = multer({
   storage: multer.diskStorage({
     destination: './public/bookr', // destination folder
-    filename: (req, file, cb) =>
-      cb(null, getFileName(req as unknown as RequestWithBookr, file)),
+    filename: (req, file, cb) => {
+      cb(null, getFileName(req as unknown as RequestWithBookr, file));
+    },
   }),
 });
 
@@ -67,14 +68,27 @@ const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
   },
 });
 
+// IMPORTANT: Prevents next from trying to parse the form
+//stackoverflow.com/questions/69478495/how-to-send-file-in-form-data-in-next-js
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 apiRoute
   .use(createNewBookr)
 
-  .post('/api/bookr', upload.array('images'), (req: NextApiRequest, res) => {
-    const redirectUrl = (req as unknown as RequestWithBookr).bookr.url;
-    console.log('Redirecting to', redirectUrl);
-
-    res.redirect(redirectUrl);
-  });
+  .post(
+    '/api/bookr',
+    async (req, res, next) => {
+      console.log('Before upload', (req as unknown as RequestWithBookr).bookr);
+      next();
+    },
+    upload.array('images'),
+    (req: NextApiRequest, res) => {
+      res.send((req as unknown as RequestWithBookr).bookr);
+    }
+  );
 
 export default apiRoute;
