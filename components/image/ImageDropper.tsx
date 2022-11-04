@@ -1,4 +1,3 @@
-import { type } from 'os';
 import React from 'react';
 import Dropzone, { DropEvent, FileRejection } from 'react-dropzone';
 
@@ -61,7 +60,7 @@ export const ImageDropper = ({ onDropImages }: Props) => {
         <div {...getRootProps()}>
           <input {...getInputProps()} />
           <div
-            className={`text-center p-16 border-2 border-dashed border-gray-500 italic hover:bg-gray-500/50 foc
+            className={`text-center p-24 grid justify-center items-center border-2 border-dashed border-gray-500 italic hover:bg-gray-500/50 foc
                         transition-all rounded-md cursor-pointer select-none ${
                           hasFocus ? 'bg-gray-500/50' : ''
                         }`}

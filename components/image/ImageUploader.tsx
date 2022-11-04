@@ -54,7 +54,7 @@ export const ImageUploader = ({ uploadUrl }: Props) => {
     <>
       <ImageDropper onDropImages={addImages} />
       <button
-        className='inline-flex items-center space-x-1'
+        className='inline-flex items-center space-x-1 mt-8'
         disabled={images.length === 0}
         onClick={uploadImages}
       >

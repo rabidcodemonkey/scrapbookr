@@ -1,13 +1,16 @@
 import type { NextPage } from 'next';
 import { ImageUploader } from '../components/image/ImageUploader';
+import { Header } from '../components/layout/header';
 
 const Home: NextPage = () => {
   return (
     <>
-      <div className='h-screen'>
-        <h1 className='text-3xl font-bold underline'>Tailwind CSS!</h1>
-        <div className='container mx-auto h-full'>
-          <ImageUploader uploadUrl='/api/bookr' />
+      <div className='h-screen flex flex-col'>
+        <Header />
+        <div className='max-w-5xl mx-auto h-full flex flex-col'>
+          <div className="my-auto">
+            <ImageUploader uploadUrl='/api/bookr' />
+          </div>
         </div>
       </div>
     </>
