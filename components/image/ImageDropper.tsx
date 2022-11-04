@@ -1,7 +1,12 @@
+import { type } from 'os';
 import React from 'react';
 import Dropzone, { DropEvent, FileRejection } from 'react-dropzone';
 
-export const ImageDropper = () => {
+type Props = {
+  onDropImages: (images: File[]) => void;
+};
+
+export const ImageDropper = ({ onDropImages }: Props) => {
   const [hasFocus, setHasFocus] = React.useState(false);
 
   const validationFunction = (file: File) => {
@@ -31,6 +36,8 @@ export const ImageDropper = () => {
     console.log('Accepted', acceptedFiles);
     console.log('Rejected', rejectedFiles);
     console.log('DropEvent', dropEvent);
+
+    onDropImages(acceptedFiles);
 
     setHasFocus(false);
   };

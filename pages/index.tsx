@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { ImageDropper } from '../components/image/image-dropper';
+import { ImageUploader } from '../components/image/ImageUploader';
 
 const Home: NextPage = () => {
   return (
@@ -7,7 +7,7 @@ const Home: NextPage = () => {
       <div className='h-screen'>
         <h1 className='text-3xl font-bold underline'>Tailwind CSS!</h1>
         <div className='container mx-auto h-full'>
-          <ImageDropper />
+          <ImageUploader uploadUrl='/api/bookr' />
         </div>
       </div>
     </>

@@ -29,31 +29,31 @@ const getFileName = (req: RequestWithBookr, file: Express.Multer.File) => {
   return path.join(req.bookr.id, `${filename}-${file.originalname}`);
 };
 
-const createNewBookr = (
-  req: RequestWithBookr,
-  res: NextApiResponse,
-  next: NextHandler
-) => {
-  console.log('createNewBookr');
-  if (req.method === 'POST') {
-    const id = uuidv4();
-    const newBookr = {
-      id,
-      title: '',
-      url: `/${id}/edit`,
-    };
-    req.bookr = newBookr;
+// const createNewBookr = (
+//   req: RequestWithBookr,
+//   res: NextApiResponse,
+//   next: NextHandler
+// ) => {
+//   console.log('createNewBookr');
+//   if (req.method === 'POST') {
+//     const id = uuidv4();
+//     const newBookr = {
+//       id,
+//       title: '',
+//       url: `/${id}/edit`,
+//     };
+//     req.bookr = newBookr;
 
-    //- create a new folder on file system using the id as the folder name
-    fs.mkdirSync(`./public/bookr/${newBookr.id}`, { recursive: true });
-    fs.copyFileSync(
-      `./public/bookr/default.json`,
-      `./public/bookr/${newBookr.id}/default.json`
-    );
-  }
+//     //- create a new folder on file system using the id as the folder name
+//     fs.mkdirSync(`./public/bookr/${newBookr.id}`, { recursive: true });
+//     fs.copyFileSync(
+//       `./public/bookr/default.json`,
+//       `./public/bookr/${newBookr.id}/default.json`
+//     );
+//   }
 
-  next();
-};
+//   next();
+// };
 
 const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
   attachParams: true,
@@ -68,7 +68,7 @@ const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
 });
 
 apiRoute
-  .use(createNewBookr)
+  // .use(createNewBookr)
 
   //- Get /api/image/<bucket-id> - Get all images for a bucket.
   .get('/api/image/:bucketId', (req: { params: { bucketId: string } }, res) => {
@@ -108,14 +108,22 @@ apiRoute
   )
 
   // - post /image/<bucket-id> // Upload one or more images to an existing bookr as multipart
-  .post('/api/image/:bucketId', upload.array('file'))
+  .post('/api/image/:bucketId', upload.array('images'));
 
-  //- Create a new bookr with the provided images
-  .post('/api/image', upload.array('file'), (req: NextApiRequest, res) => {
-    const redirectUrl = (req as unknown as RequestWithBookr).bookr.url;
-    console.log('Redirecting to', redirectUrl);
+// //- Create a new bookr with the provided images
+// .post(
+//   '/api/image',
+//   (req, res, next) => {
+//     console.log('Creating a new bookr and uploading images');
+//     next();
+//   },
+//   upload.array('file'),
+//   (req: NextApiRequest, res) => {
+//     const redirectUrl = (req as unknown as RequestWithBookr).bookr.url;
+//     console.log('Redirecting to', redirectUrl);
 
-    res.redirect(redirectUrl);
-  });
+//     res.redirect(redirectUrl);
+//   }
+// );
 
 export default apiRoute;
