@@ -30,11 +30,7 @@ const getFileName = (req: RequestWithBookr, file: Express.Multer.File) => {
   return path.join(req.bookr.id, `${filename}-${file.originalname}`);
 };
 
-const createNewBookr = (
-  req: RequestWithBookr,
-  res: NextApiResponse,
-  next: NextHandler
-) => {
+const createNewBookr = (req: RequestWithBookr, res: NextApiResponse, next: NextHandler) => {
   console.log(`${req.method} ${req.url} createNewBookr`);
   if (req.method === 'POST') {
     const id = uuidv4();
@@ -47,10 +43,7 @@ const createNewBookr = (
 
     //- create a new folder on file system using the id as the folder name
     fs.mkdirSync(`./public/bookr/${newBookr.id}`, { recursive: true });
-    fs.copyFileSync(
-      `./public/bookr/default.json`,
-      `./public/bookr/${newBookr.id}/default.json`
-    );
+    fs.copyFileSync(`./public/bookr/default.json`, `./public/bookr/${newBookr.id}/default.json`);
   }
 
   next();
@@ -59,9 +52,7 @@ const createNewBookr = (
 const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
   attachParams: true,
   onError(error, req, res) {
-    res
-      .status(501)
-      .json({ error: `Sorry something Happened! ${error.message}` });
+    res.status(501).json({ error: `Sorry something Happened! ${error.message}` });
   },
   onNoMatch(req, res) {
     res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
@@ -88,7 +79,7 @@ apiRoute
     upload.array('images'),
     (req: NextApiRequest, res) => {
       res.send((req as unknown as RequestWithBookr).bookr);
-    }
+    },
   );
 
 export default apiRoute;

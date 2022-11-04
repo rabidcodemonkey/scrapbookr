@@ -24,11 +24,7 @@ export const ImageDropper = ({ onDropImages }: Props) => {
     return valid;
   };
 
-  const onDrop = (
-    acceptedFiles: File[],
-    rejectedFiles: FileRejection[],
-    dropEvent: DropEvent
-  ) => {
+  const onDrop = (acceptedFiles: File[], rejectedFiles: FileRejection[], dropEvent: DropEvent) => {
     dropEvent.preventDefault();
     dropEvent.stopPropagation();
 
@@ -61,8 +57,8 @@ export const ImageDropper = ({ onDropImages }: Props) => {
         <div {...getRootProps()}>
           <input {...getInputProps()} />
           <div
-            className={`text-center p-16 border-2 border-dashed border-gray-500 italic hover:bg-gray-500/50 foc
-                        transition-all rounded-md cursor-pointer select-none ${
+            className={`cursor-pointer select-none rounded-md border-2 border-dashed border-gray-500 p-16
+                        text-center italic transition-all hover:bg-gray-500/50 ${
                           hasFocus ? 'bg-gray-500/50' : ''
                         }`}
           >

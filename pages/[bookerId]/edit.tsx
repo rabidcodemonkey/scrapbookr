@@ -31,13 +31,7 @@ const BookrEditView = (props: Props) => {
       <h1>BookrEditView {bookerId}</h1>
       {props.images?.map((image: ImageInfo) => (
         // <div key={image.name}>{image.name}</div>
-        <Image
-          key='image'
-          width={200}
-          height={200}
-          src={image.url}
-          alt={image.name}
-        />
+        <Image key='image' width={200} height={200} src={image.url} alt={image.name} />
       ))}
     </div>
   );
@@ -45,9 +39,7 @@ const BookrEditView = (props: Props) => {
 
 BookrEditView.getInitialProps = async (ctx: any) => {
   //- Origin of the request (only available on server-side)
-  const res = await fetch(
-    `${process.env.API_URL}/api/image/${ctx.query.bookerId}`
-  );
+  const res = await fetch(`${process.env.API_URL}/api/image/${ctx.query.bookerId}`);
   const images = await res.json();
   return { images };
 };

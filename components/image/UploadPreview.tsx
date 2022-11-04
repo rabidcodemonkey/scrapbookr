@@ -13,7 +13,7 @@ export const UploadPreview = ({ images, onRemoveImage }: Props) => {
   return (
     <div className='flex flex-wrap gap-4'>
       {images.map((image) => (
-        <div key={image.name} className='relative group w-[100px] h-[100px]'>
+        <div key={image.name} className='group relative h-[100px] w-[100px]'>
           <Image
             width={100}
             height={100}
@@ -22,7 +22,7 @@ export const UploadPreview = ({ images, onRemoveImage }: Props) => {
             objectFit='contain'
           />
           <TiDelete
-            className='group-hover:visible invisible absolute top-0 right-0 text-red-500 cursor-pointer w-6 h-6'
+            className='invisible absolute top-0 right-0 h-6 w-6 cursor-pointer text-red-500 group-hover:visible'
             onClick={() => onRemoveImage(image)}
           />
         </div>

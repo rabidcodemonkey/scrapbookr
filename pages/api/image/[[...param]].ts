@@ -20,8 +20,7 @@ let filename = uuidv4() + '-' + new Date().getTime();
 const upload = multer({
   storage: multer.diskStorage({
     destination: './public/bookr', // destination folder
-    filename: (req, file, cb) =>
-      cb(null, getFileName(req as unknown as RequestWithBookr, file)),
+    filename: (req, file, cb) => cb(null, getFileName(req as unknown as RequestWithBookr, file)),
   }),
 });
 
@@ -32,9 +31,7 @@ const getFileName = (req: RequestWithBookr, file: Express.Multer.File) => {
 const apiRoute = nextConnect<NextApiRequest, NextApiResponse>({
   attachParams: true,
   onError(error, req, res) {
-    res
-      .status(501)
-      .json({ error: `Sorry something Happened! ${error.message}` });
+    res.status(501).json({ error: `Sorry something Happened! ${error.message}` });
   },
   onNoMatch(req, res) {
     res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
@@ -80,12 +77,9 @@ apiRoute
   })
 
   // - delete /image/<bucket-id>/<image-name>
-  .delete(
-    '/api/image/:bucketId/:imageName',
-    (req: { params: unknown }, res) => {
-      res.status(200).json(req.params);
-    }
-  )
+  .delete('/api/image/:bucketId/:imageName', (req: { params: unknown }, res) => {
+    res.status(200).json(req.params);
+  })
 
   // - post /image/<bucket-id> // Upload one or more images to an existing bookr as multipart
   .post('/api/image/:bucketId', upload.array('images'));

@@ -35,7 +35,7 @@ export const ImageUploader = ({ uploadUrl }: Props) => {
         onUploadProgress: (progressEvent) => {
           console.log(
             'Upload Progress: ',
-            Math.round((progressEvent.loaded / progressEvent.total) * 100) + '%'
+            Math.round((progressEvent.loaded / progressEvent.total) * 100) + '%',
           );
         },
       })
@@ -61,11 +61,7 @@ export const ImageUploader = ({ uploadUrl }: Props) => {
         <MdCloudUpload />
         <span>Upload</span>
       </button>
-      <UploadPreview
-        images={images}
-        onRemoveImage={removeImage}
-        uploadState='idle'
-      />
+      <UploadPreview images={images} onRemoveImage={removeImage} uploadState='idle' />
     </>
   );
 };
