@@ -5,10 +5,10 @@ import { Header } from '../components/layout/header';
 const Home: NextPage = () => {
   return (
     <>
-      <div className='h-screen flex flex-col'>
+      <div className='flex h-screen flex-col'>
         <Header />
-        <div className='max-w-5xl mx-auto h-full flex flex-col'>
-          <div className="my-auto">
+        <div className='mx-auto flex h-full max-w-5xl flex-col'>
+          <div className='my-auto'>
             <ImageUploader uploadUrl='/api/bookr' />
           </div>
         </div>
