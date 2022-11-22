@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
-import Image from 'next/image';
+
 import React, { useEffect } from 'react';
+import { ImageGrid } from '../../components/grid/ImageGrid';
 
 process.env.API_URL = 'http://localhost:3000';
 
-type ImageInfo = {
+export type ImageInfo = {
   name: string;
   url: string;
 };
@@ -29,10 +30,7 @@ const BookrEditView = (props: Props) => {
   return (
     <div>
       <h1>BookrEditView {bookerId}</h1>
-      {props.images?.map((image: ImageInfo) => (
-        // <div key={image.name}>{image.name}</div>
-        <Image key='image' width={200} height={200} src={image.url} alt={image.name} />
-      ))}
+      <ImageGrid images={props.images}></ImageGrid>
     </div>
   );
 };
