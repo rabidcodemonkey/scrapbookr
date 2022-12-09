@@ -1,8 +1,8 @@
 import React from 'react';
-import { DropEvent } from 'react-dropzone';
 import { type Layout, Responsive, WidthProvider } from 'react-grid-layout';
 import { ImageInfo } from '../../pages/[bookerId]/edit';
 import Image from 'next/image';
+import 'react-grid-layout/css/styles.css';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -14,19 +14,23 @@ type LayoutImage = Layout & ImageInfo;
 
 const defaultProps = {
   className: 'layout',
-  rowHeight: 30,
+  // rowHeight: 120,
   onLayoutChange: function () {},
   cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
 };
 
 export const ImageGrid = (props: Props) => {
-  const onDrop = (layout, layoutItem, _event: DropEvent) => {
+  const onDrop = (layout, layoutItem, _event) => {
     // _event.preventDefault();
     // _event.stopPropagation();
     console.log('onDrop', layout, layoutItem, _event);
 
     console.log('event', _event);
     console.log('layout', layout);
+  };
+
+  const onBreakpointChange = (breakpoint, cols) => {
+    console.log('onBreakpointChange', breakpoint, cols);
   };
 
   const layout: LayoutImage[] = props.images.map((image, index) => {
@@ -42,24 +46,18 @@ export const ImageGrid = (props: Props) => {
   });
 
   return (
-    <div className='h-full min-h-[10rem] w-full bg-red-200'>
+    <div className='h-full min-h-[10rem] w-full bg-slate-200'>
       <ResponsiveGridLayout
         {...defaultProps}
         layouts={{ lg: layout }}
-        compactType={'horizontal'}
         onDrop={onDrop}
+        onBreakpointChange={onBreakpointChange}
         isDroppable={true}
         measureBeforeMount={false}
       >
         {layout?.map((image: ImageInfo) => (
-          // <div key={image.name}>{image.name}</div>
-          <div
-            draggable={true}
-            unselectable='on'
-            key={`image-${image.name}`}
-            onDragStart={(e) => e.dataTransfer.setData('text/plain', '')}
-          >
-            <Image width={200} height={200} src={image.url} alt={image.name} />
+          <div className='relative aspect-square overflow-hidden bg-slate-300' key={image.name}>
+            <Image fill className='object-cover' src={image.url} alt={image.name} />
           </div>
         ))}
       </ResponsiveGridLayout>
